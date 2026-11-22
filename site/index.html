@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telugu LoRA Eval — plan</title>
+<meta name="description" content="Planned project: LoRA/QLoRA fine-tuning of a small open model on Telugu instruction data, evaluated against the base model. Implementation not started.">
+<meta name="color-scheme" content="light dark">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --text: #1d1b16;
+    --muted: #5c574d;
+    --line: #dcd7ca;
+    --accent: #1f4fbf;
+    --accent-text: #ffffff;
+    --badge-bg: #fff1c2;
+    --badge-text: #5a4300;
+    --badge-line: #d9b44a;
+    --focus: #b3470c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141310;
+      --surface: #1e1c18;
+      --text: #f0ede4;
+      --muted: #b4aea0;
+      --line: #3a362e;
+      --accent: #8fb0ff;
+      --accent-text: #0d1630;
+      --badge-bg: #3a2f0c;
+      --badge-text: #ffe39a;
+      --badge-line: #8a6d1c;
+      --focus: #ffb27a;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Telugu", sans-serif;
+  }
+  .wrap { max-width: 56rem; margin: 0 auto; padding: 0 1rem; }
+  a { color: var(--accent); text-underline-offset: 0.15em; }
+  a:focus-visible, .skip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .skip {
+    position: absolute; left: 0.5rem; top: -4rem;
+    background: var(--surface); color: var(--text);
+    padding: 0.5rem 0.75rem; border: 2px solid var(--accent); border-radius: 6px;
+  }
+  .skip:focus { top: 0.5rem; }
+  header { padding: 2.5rem 0 1.5rem; border-bottom: 1px solid var(--line); }
+  .badge {
+    display: inline-block;
+    background: var(--badge-bg); color: var(--badge-text);
+    border: 1px solid var(--badge-line);
+    border-radius: 999px;
+    padding: 0.15rem 0.75rem;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); line-height: 1.15; margin: 0.75rem 0 0.5rem; }
+  h2 { font-size: 1.35rem; margin: 0 0 0.75rem; line-height: 1.25; }
+  h3 { font-size: 1.05rem; margin: 1.25rem 0 0.25rem; }
+  .lead { font-size: 1.1rem; color: var(--muted); max-width: 42rem; margin: 0 0 1.25rem; }
+  .status { margin: 0 0 1.25rem; font-weight: 600; }
+  .button {
+    display: inline-block;
+    background: var(--accent); color: var(--accent-text);
+    padding: 0.6rem 1.1rem; border-radius: 8px; text-decoration: none; font-weight: 600;
+  }
+  .button:hover { filter: brightness(1.08); }
+  .links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; }
+  main section { padding: 2rem 0; border-bottom: 1px solid var(--line); }
+  main section:last-of-type { border-bottom: 0; }
+  p, ul, ol { margin: 0 0 0.75rem; }
+  ul, ol { padding-left: 1.25rem; }
+  li { margin-bottom: 0.3rem; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.1rem; }
+  .card h3 { margin-top: 0; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.95rem; }
+  caption { text-align: left; padding: 0.75rem 1rem 0; color: var(--muted); font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 700; }
+  tr:last-child td { border-bottom: 0; }
+  code { font: 0.9em ui-monospace, SFMono-Regular, Consolas, monospace; background: color-mix(in srgb, var(--line) 45%, transparent); padding: 0.1em 0.35em; border-radius: 4px; }
+  .note { color: var(--muted); font-size: 0.95rem; }
+  footer { padding: 1.5rem 0 3rem; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap">
+    <span class="badge">Planned</span>
+    <h1>Telugu LoRA Eval</h1>
+    <p class="lead">Fine-tune a small open-weight language model on Telugu instruction data with LoRA/QLoRA, then test whether it really beats the base model on held-out Telugu benchmarks and a small human-rated set. <span lang="te">తెలుగు</span> is the target language.</p>
+    <p class="status">Status: Planned — implementation not started yet. Nothing here has been built, trained or measured, and no results are claimed.</p>
+    <div class="links">
+      <a class="button" href="https://github.com/monishchaparla/telugu-lora-eval">View the plan repository on GitHub</a>
+      <a href="https://github.com/monishchaparla/telugu-lora-eval/blob/main/PLAN.md">Week-by-week checklist</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section aria-labelledby="why">
+      <h2 id="why">Why this project</h2>
+      <p>Most AI projects call a hosted API. This one adapts a model, controls the data, and proves the change with an evaluation that is allowed to say “it did not help”.</p>
+      <p>The question: does parameter-efficient fine-tuning on open Telugu instruction data measurably improve a 1–3B model on held-out Telugu tasks, and what does it cost in English ability? A negative or mixed answer will be reported as such.</p>
+    </section>
+
+    <section aria-labelledby="approach">
+      <h2 id="approach">Approach</h2>
+      <ol>
+        <li><strong>Model:</strong> <code>Qwen/Qwen3-1.7B-Base</code>, Apache-2.0, Telugu listed among its supported languages (coverage quality to be measured, not assumed).</li>
+        <li><strong>Data:</strong> open Telugu instruction sets, filtered, with test-set overlap removed and the split frozen by hash.</li>
+        <li><strong>Training:</strong> QLoRA (4-bit base, LoRA adapters) with <code>peft</code> and <code>transformers</code> on a free T4 GPU.</li>
+        <li><strong>Evaluation:</strong> one harness, same prompts and decoding for base (few-shot), fine-tuned, and the official post-trained model as a reference.</li>
+        <li><strong>Report:</strong> confidence intervals, error analysis, model card, and a list of what did not work.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="data">
+      <h2 id="data">Data and licences</h2>
+      <p class="note">Licence fields read from Hugging Face cards at planning time. Each component gets an upstream check before use.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Training candidates and evaluation sets</caption>
+          <thead>
+            <tr><th scope="col">Source</th><th scope="col">Use</th><th scope="col">Licence on card</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Aya Dataset (Telugu)</td><td>Training, human-written</td><td>Apache-2.0</td></tr>
+            <tr><td>Aya Collection (Telugu subsets)</td><td>Training, screened for overlap</td><td>Apache-2.0</td></tr>
+            <tr><td>IndicAlign-Instruct (Telugu)</td><td>Training, translated components</td><td>CC-BY-4.0</td></tr>
+            <tr><td>IndicXNLI (te)</td><td>Evaluation only</td><td>CC0-1.0</td></tr>
+            <tr><td>IndicSentiment (te)</td><td>Evaluation only</td><td>No licence field; to confirm</td></tr>
+            <tr><td>Belebele (tel_Telu)</td><td>Evaluation only</td><td>CC-BY-SA-4.0</td></tr>
+            <tr><td>FLORES-derived en↔te</td><td>Evaluation only</td><td>CC-BY-SA-4.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Excluded after checking: an AI4Bharat instruction set that has no Telugu, a non-commercial paraphrase set, and Alpaca translations with a non-commercial upstream.</p>
+    </section>
+
+    <section aria-labelledby="eval">
+      <h2 id="eval">Evaluation design</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Classification and QA</h3>
+          <p>NLI, sentiment and reading comprehension scored by option log-likelihood. Accuracy and macro-F1 with 95% bootstrap intervals and a chance baseline.</p>
+        </div>
+        <div class="card">
+          <h3>Translation</h3>
+          <p>English↔Telugu with chrF++ (sacreBLEU), signature recorded, paired bootstrap between systems.</p>
+        </div>
+        <div class="card">
+          <h3>Human-rated set</h3>
+          <p>50 fresh prompts, blind and shuffled outputs, two Telugu-speaking raters, rubric for fluency, correctness and instruction following, agreement reported. Directional evidence only.</p>
+        </div>
+        <div class="card">
+          <h3>Safety checks</h3>
+          <p>Contamination filter, English regression check, Telugu-script output rate, repetition rate.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="stack">
+      <h2 id="stack">Tech stack and compute</h2>
+      <ul>
+        <li>PyTorch, Hugging Face <code>transformers</code>, <code>peft</code>, <code>datasets</code>, <code>bitsandbytes</code>, <code>trl</code></li>
+        <li>Weights &amp; Biases or MLflow for tracking (chosen in week 1)</li>
+        <li>Free Kaggle and Colab GPUs; checkpoint and resume on every session; target cost ₹0 / $0, with any top-up capped and recorded first</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="milestones">
+      <h2 id="milestones">Milestones</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>Each milestone has a done-criterion in the repository README</caption>
+          <thead>
+            <tr><th scope="col">Milestone</th><th scope="col">Done when</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>M0 Protocol and licence audit</td><td>Evaluation protocol and licence table committed; test sets frozen by hash</td></tr>
+            <tr><td>M1 Harness and baseline</td><td>One command evaluates any model; base scores logged with intervals</td></tr>
+            <tr><td>M2 Data pipeline</td><td>Deterministic splits and a contamination report</td></tr>
+            <tr><td>M3 Smoke run</td><td>Tiny QLoRA run finishes and resumes from a checkpoint</td></tr>
+            <tr><td>M4 Main fine-tune</td><td>Adapters trained, logged and published</td></tr>
+            <tr><td>M5 Full evaluation</td><td>All systems scored; two raters finished; agreement computed</td></tr>
+            <tr><td>M6 Write-up</td><td>Model card, limitations and reproduction steps complete</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Planned length: 8 weeks at roughly 8–10 hours a week.</p>
+    </section>
+
+    <section aria-labelledby="risks">
+      <h2 id="risks">Main risks</h2>
+      <ul>
+        <li>Free GPU quota and disconnects: short checkpointed runs.</li>
+        <li>Telugu tokenisation cost: measured first and reported.</li>
+        <li>Test contamination and licence chains: overlap filter and per-source audit.</li>
+        <li>Scores near chance for a 1.7B model: intervals and “no significant difference” stated when true.</li>
+        <li>Small, author-written human set: blind, two raters, called directional.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Planned project by Monish Chaparla. Source and plan: <a href="https://github.com/monishchaparla/telugu-lora-eval">github.com/monishchaparla/telugu-lora-eval</a>. Results will appear here only after they exist.</p>
+  </div>
+</footer>
+</body>
+</html>
